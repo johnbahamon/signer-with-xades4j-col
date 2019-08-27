@@ -1,7 +1,7 @@
 package com.workoutstudioapp.xadessignercr;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,347 +12,388 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import java.net.URL;
+import java.net.MalformedURLException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import xades4j.production.Enveloped;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.production.EnvelopedXmlObject;
+import xades4j.production.DataObjectReference;
 import xades4j.production.XadesEpesSigningProfile;
+import xades4j.production.SignatureAppendingStrategies;
 import xades4j.production.XadesSigner;
+import xades4j.production.SignedDataObjects;
 import xades4j.production.XadesSigningProfile;
+import xades4j.properties.DataObjectDesc;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.SignaturePolicyBase;
+import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.impl.FileSystemKeyStoreKeyingDataProvider;
 
 public class Signer {
-	public void sign(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
+
+	public void sign(String keyPath, String password, String xmlInPath, String xmlOutPath, final String policyUrl) {
+
+        try {
             
             SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
                 public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+                    try {
+                        return new SignaturePolicyIdentifierProperty( new ObjectIdentifier( policyUrl ), new URL( policyUrl ).openStream() );
+                    } catch (MalformedURLException ex) {
+                        return new SignaturePolicyImpliedProperty();
+                    } catch (IOException ex) {
+                        return new SignaturePolicyImpliedProperty();
+                    }
                 }
             };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
+
+            KeyingDataProvider kp = new FileSystemKeyStoreKeyingDataProvider(
+                    "pkcs12",
+                    keyPath,
+                    new FirstCertificateSelector(),
+                    new DirectPasswordProvider(password),
+                    new DirectPasswordProvider(password),
+                    false
+            );
+
             // SignaturePolicyInfoProvider spi = new
             XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
+
             // open file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
-            
+            Document doc = builder.parse(new File(xmlInPath));
+
+//            Se establece el punto donde se requiere la firma (segundo elemento ext:ExtensionContent del XML)
+            NodeList tag = doc.getElementsByTagName("ext:ExtensionContent");
+            Node elemToSign = tag.item(1); // encuentra el nodo en la lista anterior
+            DataObjectDesc dataObjRef = new DataObjectReference("").withTransform(new EnvelopedSignatureTransform());//crea un dataobject del xml para firmar
+
+
+
+//            signer.sign(new SignedDataObjects(obj), docDest);
+
+
+
+
+
+
             XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
+
+//            DataObjectDesc obj = new EnvelopedXmlObject(elemToSign, "text/xml", null);
+
+            signer.sign(new SignedDataObjects( dataObjRef ), elemToSign, SignatureAppendingStrategies.AsFirstChild);
+
+//            new SignedDataObjects(new DataObjectDesc[] { dataObjRef });
+
+
+//            new Enveloped(signer).sign( new SignedDataObjects(new DataObjectDesc[] { dataObjRef }), elemToSign, SignatureAppendingStrategies.AsFirstChild );
+
+
+
+
+
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
+            Source input = new DOMSource(doc);
             
             transformer.transform(input, output);
         } catch (Exception e) {
             e.printStackTrace();
         }
 	}
-	public void sign_factura_compra(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
 
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	
-	public void sign_factura_exportacion(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaExportacion"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
-
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	
-	
-	public void sign_nota_credito(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
-
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	
-	public void sign_mensaje_receptor(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
-
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	public void sign_nota_debito(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaDebitoElectronica"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
-
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	public void sign_tiquete(String keyPath, String password, String xmlInPath, String xmlOutPath) {
-		KeyingDataProvider kp;
-try {
-            
-            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
-                public SignaturePolicyBase getSignaturePolicy() {
-                    return new SignaturePolicyIdentifierProperty(
-                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico"),
-                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
-                }
-            };
-            
-            kp = new FileSystemKeyStoreKeyingDataProvider(
-                       "pkcs12", 
-                       keyPath,
-                       new FirstCertificateSelector(), 
-                       new DirectPasswordProvider(password),
-                       new DirectPasswordProvider(password), 
-                       false);
-            
-            // SignaturePolicyInfoProvider spi = new
-            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
-            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
-           
-            // open file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-            Document doc1 = builder.parse(new File(xmlInPath));
-            Element elemToSign = doc1.getDocumentElement();
-
-            
-            XadesSigner signer = p.newSigner();
-             
-            new Enveloped(signer).sign(elemToSign);
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(xmlOutPath);
-            Source input = new DOMSource(doc1);
-            
-            transformer.transform(input, output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
+//	public void sign_factura_compra(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaCompra"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
+//
+//	public void sign_factura_exportacion(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronicaExportacion"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
+//
+//
+//	public void sign_nota_credito(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaCreditoElectronica"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
+//
+//	public void sign_mensaje_receptor(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/mensajeReceptor"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
+//	public void sign_nota_debito(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/notaDebitoElectronica"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
+//	public void sign_tiquete(String keyPath, String password, String xmlInPath, String xmlOutPath) {
+//		KeyingDataProvider kp;
+//        try {
+//
+//            SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider() {
+//                public SignaturePolicyBase getSignaturePolicy() {
+//                    return new SignaturePolicyIdentifierProperty(
+//                            new ObjectIdentifier("https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/tiqueteElectronico"),
+//                            new ByteArrayInputStream("Politica de Factura Digital".getBytes()));
+//                }
+//            };
+//
+//            kp = new FileSystemKeyStoreKeyingDataProvider(
+//                       "pkcs12",
+//                       keyPath,
+//                       new FirstCertificateSelector(),
+//                       new DirectPasswordProvider(password),
+//                       new DirectPasswordProvider(password),
+//                       false);
+//
+//            // SignaturePolicyInfoProvider spi = new
+//            XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
+//            //p.withBasicSignatureOptionsProvider(new SignatureOptionsProvider());
+//
+//            // open file
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            DocumentBuilder builder = null;
+//            builder = factory.newDocumentBuilder();
+//            Document doc1 = builder.parse(new File(xmlInPath));
+//            Element elemToSign = doc1.getDocumentElement();
+//
+//
+//            XadesSigner signer = p.newSigner();
+//
+//            new Enveloped(signer).sign(elemToSign);
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(xmlOutPath);
+//            Source input = new DOMSource(doc1);
+//
+//            transformer.transform(input, output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//	}
 }
 
 
