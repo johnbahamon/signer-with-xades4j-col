@@ -5,9 +5,9 @@ Este proyecto realiza el firmado digital de los archivos XMLs de factura electr√
 ```
 Usage:
 
-java -jar xades-signer-cr sign_factura <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
-java -jar xades-signer-cr sign_nota_debito <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
-java -jar xades-signer-cr sign_nota_credito <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
+java -jar xades-signer-col sign_factura <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
+java -jar xades-signer-col sign_nota_debito <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
+java -jar xades-signer-col sign_nota_credito <keyPath> <keyPassword> <xmlInPath> <xmlOutPath>
 ```
 
 **sign** firma el xml.
