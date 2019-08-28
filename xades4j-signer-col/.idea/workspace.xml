@@ -2,74 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="591308f7-c19f-4142-824a-f1fb8a3c3fb2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.classpath" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__aopalliance_aopalliance_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_9_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_9_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_google_inject_extensions_guice_multibindings_2_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_google_inject_guice_2_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__com_googlecode_xades4j_xades4j_1_5_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__commons_codec_commons_codec_1_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__commons_io_commons_io_1_3_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__javax_xml_stream_stax_api_1_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_apache_santuario_xmlsec_2_0_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_bouncycastle_bcpkix_jdk15on_1_56.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_bouncycastle_bcprov_jdk15on_1_56.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_codehaus_woodstox_stax2_api_3_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_codehaus_woodstox_woodstox_core_asl_4_4_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_28.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_28.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.project" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.settings/org.eclipse.jdt.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/.settings/org.eclipse.m2e.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/build.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/release/50617041800030455030100100001030000000190199999999.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/release/Dashboard.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/release/firmar.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/release/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/release/r.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/Cli.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/ComprobanteElectronico.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/DirectPasswordProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/FirstCertificateSelector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/MensajeReceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/MessageDigestWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/MyAlgorithmsProviderEx.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/MyMessageDigestProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/ObligadoTributario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/Sender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/Signer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/com/workoutstudioapp/xades4j-signer-col/XmlHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/java/log4j.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/resources/FacturaElectronica.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/src/main/resources/log4j.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../xades4j-signer-col/test.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xades4j-signer-col.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/ejemplo documentos/DE-50608051900000000000000100001030000000205199999999.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/ejemplo documentos/DE-50616051900030455030100100001080000000009199999999.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/ejemplo documentos/DE-50620051900030455030100100001010000000876199999999.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/ejemplo documentos/DE-50620051900030455030100100001090000000001199999999.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/ejemplo documentos/MR-.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jar compilado con ejemplos/firmador.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xades4j-signer-col.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../xades4j-signer-col/xades4j-signer-col.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xades4j-signer-col.iml" beforeDir="false" afterPath="$PROJECT_DIR$/xades4j-signer-col.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../xadessignercr/.idea/.gitignore" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -149,6 +84,7 @@
       <workItem from="1566664787924" duration="6319000" />
       <workItem from="1566935671765" duration="444000" />
       <workItem from="1566936127938" duration="634000" />
+      <workItem from="1567029747738" duration="71000" />
     </task>
     <servers />
   </component>
