@@ -62,7 +62,6 @@ public class Signer {
                     false
             );
 
-            // SignaturePolicyInfoProvider spi = new
             XadesSigningProfile p = new XadesEpesSigningProfile(kp, policyInfoProvider);
 
             // open file
@@ -72,15 +71,18 @@ public class Signer {
 
             Document doc = builder.parse(new File(xmlInPath));
 
-//            Se establece el punto donde se requiere la firma (segundo elemento ext:ExtensionContent del XML)
+            // Se establece el punto donde se requiere la firma (segundo elemento ext:ExtensionContent del XML)
             NodeList tag = doc.getElementsByTagName("ext:ExtensionContent");
             Node elemToSign = tag.item(1); // encuentra el nodo en la lista anterior
-            DataObjectDesc dataObjRef = new DataObjectReference("").withTransform(new EnvelopedSignatureTransform());//crea un dataobject del xml para firmar
 
+            // Crea un DataObject del xml para firmar
+            DataObjectDesc dataObjRef = new DataObjectReference("").withTransform(new EnvelopedSignatureTransform());
+
+            // Firmo
             XadesSigner signer = p.newSigner();
-
             signer.sign(new SignedDataObjects( dataObjRef ), elemToSign, SignatureAppendingStrategies.AsFirstChild);
 
+            // Transformo, creo archivo destino con la firma
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             Result output = new StreamResult(xmlOutPath);
             Source input = new DOMSource(doc);
