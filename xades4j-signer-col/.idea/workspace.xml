@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="591308f7-c19f-4142-824a-f1fb8a3c3fb2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xades4j-signer-col.iml" beforeDir="false" afterPath="$PROJECT_DIR$/xades4j-signer-col.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../xadessignercr/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,6 +84,7 @@
       <workItem from="1566935671765" duration="444000" />
       <workItem from="1566936127938" duration="634000" />
       <workItem from="1567029747738" duration="71000" />
+      <workItem from="1567029823408" duration="629000" />
     </task>
     <servers />
   </component>
