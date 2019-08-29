@@ -1,6 +1,6 @@
 # Firmador JAVA Facturación electrónica - DIAN Colombia
 
-Este proyecto realiza el firmado criptografico utilizando la API [xades4j](https://github.com/luisgoncalves/xades4j) para los archivos XMLs de facturacion electrónica adaptados para la DIAN UBL v2 Colombia.
+Este proyecto realiza el firmado criptografico utilizando la API [xades4j](https://github.com/luisgoncalves/xades4j) para los archivos XMLs de facturacion electrónica adaptados para la DIAN Colombia.
 
 ```
 Usage:
