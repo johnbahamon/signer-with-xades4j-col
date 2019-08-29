@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="591308f7-c19f-4142-824a-f1fb8a3c3fb2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jorgcastellano/xadessigner/Cli.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jorgcastellano/xadessigner/Cli.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/jorgcastellano/xadessigner/Signer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jorgcastellano/xadessigner/Signer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.sh" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -84,7 +88,7 @@
       <workItem from="1566935671765" duration="444000" />
       <workItem from="1566936127938" duration="634000" />
       <workItem from="1567029747738" duration="71000" />
-      <workItem from="1567029823408" duration="1584000" />
+      <workItem from="1567029823408" duration="7995000" />
     </task>
     <servers />
   </component>
