@@ -16,4 +16,19 @@ java -jar firmador.jar <certicatePath> <certificatePassword> <xmlInPath> <xmlOut
   
 \<xmlOutPath\> Ruta de salida del archivo firmado.
 
+
+```
+Nodejs
+
+var exec = require('child_process').exec, child; 
+child = exec('java -jar firmador.jar <certicatePath> <certificatePassword> <xmlInPath> <xmlOutPath>', 
+function (error, stdout, stderr){ 
+    console.log('stdout: ' + stdout); 
+    console.log('stderr: ' + stderr); 
+    if(error !== null){ 
+        console.log('exec error: ' + error); 
+    } 
+});
+```
+
 Le doy las gracias a [tim1991](https://github.com/tim1991) por su deseo de compartir su proyecto para firmar documentos electrónicos para Costa Rica, me sirvió como base para adaptarlo para la DIAN - Colombia, ademas de leer mucho los comentarios y [aportes de la comunidad de la API xades4j](https://github.com/luisgoncalves/xades4j/issues/134)
